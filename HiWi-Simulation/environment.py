@@ -89,11 +89,11 @@ class Process:
 
         
 class SurgicalSimulation:
-    def __init__(self):
-        self.current_process = None
+    def __init__(self, current_process: str):
+        self.current_process = current_process
 
-    def set_start_process(self, process):
-        self.current_process = process
+    #def set_start_process(self, process):
+    #    self.current_process = process
 
     def run(self, global_vars):
         print(f"Starting process: {self.current_process.name}")
