@@ -24,18 +24,25 @@ class Process:
         self.name = name
         self.base_transitions = {}
         self.duration = duration
+        
         self.adjustment_factors = {}
 
     def add_transition(self, next_process, base_probability):
+        if not 0 <= base_probability <= 1:
+            raise ValueError("base_probability must be between 0 and 1")
         self.base_transitions[next_process] = base_probability
+        
         self.adjustment_factors[next_process] = 1.0  # Default factor
 
 
 
+#for more complex prbobailities with the incorporation of the global variables
     def set_adjustment_factor(self, next_process, factor):
         if next_process not in self.adjustment_factors:
             raise ValueError(f"Adjustment factor for '{next_process}' not found. "
                              "Make sure the process has been added as a transition.")
+        if factor < 0:
+            raise ValueError(f"Adjustment factor must be non-negative, got {factor}")
         self.adjustment_factors[next_process] = factor
 
     def adjust_probabilities(self, global_vars):
@@ -66,6 +73,7 @@ class Process:
 
     def get_next_process(self, global_vars):
         adjusted_probs = self.adjust_probabilities(global_vars)
+        
         r = random.random()  # Random float between 0 and 1
         cumulative_probability = 0.0
         for next_process, probability in adjusted_probs.items():

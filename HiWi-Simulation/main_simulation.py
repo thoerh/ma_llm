@@ -1,50 +1,25 @@
-print("Let's go")
+from environment import Process
+from environment import GlobalVariables
+from environment import SurgicalSimulation
 
-class SceneGraph:
-    def __init__(self, nodes, positions, timestamp):
-        self.nodes = nodes
-        self.positions = positions
-        self.timestamp = timestamp
+cleaning = Process("Cleaning", 10)
+incision = Process("Incision", 15)
+suturing = Process("Suturing", 20)
+recovery = Process("Recovery", 30)
 
-class Process:
-    def __init__(self, process_name, scene_graphs):
-        self.process_name = process_name  # Name of the process, e.g., 'cleaning'
-        self.scene_graphs = scene_graphs  # List of scene graphs related to this process
+# Define transitions
+cleaning.add_transition(incision, 0.9)
+cleaning.add_transition(cleaning, 0.1)  # 10% chance to repeat cleaning
 
-    def get_duration(self):
-        # Return the time duration of this process based on the timestamps of the scene graphs
-        if self.scene_graphs:
-            start_time = self.scene_graphs[0].timestamp
-            end_time = self.scene_graphs[-1].timestamp
-            return end_time - start_time
-        return 0
+incision.add_transition(suturing, 0.8)
+incision.add_transition(cleaning, 0.2)  # 20% chance to go back to cleaning
 
-    def get_spatial_relationships(self):
-        # Optionally: return spatial relationships of nodes across the scene graphs
-        return [graph.positions for graph in self.scene_graphs]
+suturing.add_transition(recovery, 1.0)  # Always go to recovery after suturing
 
-class SurgerySimulation:
-    def __init__(self, initial_graph, global_vars):
-        self.current_graph = initial_graph
-        self.global_vars = global_vars
-    
-    def transition(self, current_process):
-        # Use probabilities and global variables to determine the next process
-        pass
-    
-    def run(self):
-        while not self.end_of_surgery():
-            next_process = self.transition(self.current_process)
-            self.update_scene_graph(next_process)
-    
-    def update_scene_graph(self, process):
-        # Update the scene graph based on the process
-        pass
+# Simulate a simple surgery
+current_process = cleaning
+while current_process:
+    print(f"Current process: {current_process.name} (Duration: {current_process.duration})")
+    current_process = current_process.get_next_process()
 
-
-
-# Initialize and run
-global_vars = {'surgeon_skill': 0.9, 'hygiene_level': 0.8}
-initial_graph = SceneGraph(nodes, positions, timestamp)
-simulation = SurgerySimulation(initial_graph, global_vars)
-simulation.run()
+print("Surgery completed.")

@@ -7,6 +7,7 @@
 
 
 from environment import Process
+from environment import GlobalVariables
 
 initialize = Process("Initialize")
 cleaning = Process("Cleaning")
@@ -22,3 +23,4 @@ closing_incision = Process("Closing of Incision")
 post_operative_care = Process("Post-operative Care")
 error_redo = Process("Error/Redo")
 end = Process("End")
+
