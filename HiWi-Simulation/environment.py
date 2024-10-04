@@ -29,7 +29,7 @@ class Process:
         self.adjustable_transitions = set()
 
 
-    def add_transition(self, next_process: str, base_probability: float):
+    def add_transition(self, next_process, base_probability: float):
         if not 0 <= base_probability <= 1:
             raise ValueError("base_probability must be between 0 and 1")
         self.base_transitions[next_process] = base_probability
@@ -40,7 +40,7 @@ class Process:
         self.base_transitions[next_process] = base_probability
         
     def add_redo_transition(self, base_probability):
-        next_process = self.name
+        next_process = self
         self.base_transitions[next_process] = base_probability
 
 
@@ -131,13 +131,13 @@ class Process:
 
         
 class SurgicalSimulation:
-    def __init__(self, GlobalVariables: str):
+    def __init__(self, GlobalVariables):
         self.global_vars = GlobalVariables
 
     #def set_start_process(self, process):
     #    self.current_process = process
 
-    def run(self, current_process: str):
+    def run(self, current_process):
         self.current_process = current_process
         print(f"Starting process: {self.current_process.name}")
         while self.current_process is not None:

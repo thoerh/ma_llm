@@ -11,14 +11,14 @@ from environment import GlobalVariables
 from environment import SurgicalSimulation
 
 
-var_knee_surgery = GlobalVariables(0.3, 0.7, 0.7)
+var_knee_surgery = GlobalVariables(0.2, 0.7, 0.7)
 
 
 
 initialize = Process("Initialize", 5)
 cleaning = Process("Cleaning", 10)
 anesthesia = Process("Anesthesia", 15)
-error_redo = Process("Error/Redo", 5)
+error = Process("Error", 5)
 incision = Process("Incision", 20)
 knee_joint_preparation = Process("Knee Joint Preparation", 30)
 bone_resurfacing = Process("Bone Resurfacing", 25)
@@ -36,15 +36,20 @@ initialize.add_transition(cleaning, 0.9)
 initialize.add_redo_transition(0.1)
 
 cleaning.add_transition(anesthesia, 0.8)
-cleaning.add_transition(cleaning, 0.1)  # 10% chance to repeat cleaning
-cleaning.add_transition(error_redo, 0.1)
+cleaning.add_redo_transition(0.15) 
+cleaning.add_alt_transition(error, 0.05)
 
-anesthesia.add_transition(incision, 1)
+anesthesia.add_transition(incision, 0.9)
+anesthesia.add_redo_transition(0.1)
 
 incision.add_transition(knee_joint_preparation, 0.5)
-incision.add_transition(error_redo, 0.5)  
+incision.add_redo_transition(0.5)  
 
-knee_joint_preparation.add_transition(bone_resurfacing, 1.0)  # Always go to recovery after suturing
+knee_joint_preparation.add_transition(insertion_prosthetic, 1.0)
+
+insertion_prosthetic.add_transition(end, 0.6)
+insertion_prosthetic.add_redo_transition(0.2)
+insertion_prosthetic.add_alt_transition(knee_joint_preparation, 0.2)
 
 
 basic_simulation = SurgicalSimulation(var_knee_surgery)
