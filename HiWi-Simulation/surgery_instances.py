@@ -41,11 +41,11 @@ cleaning.add_transition(error_redo, 0.1)
 anesthesia.add_transition(incision, 1)
 
 incision.add_transition(knee_joint_preparation, 0.5)
-incision.add_transition(error_redo, 0.5)  # 20% chance to go back to cleaning
+incision.add_transition(error_redo, 0.5)  
 
 knee_joint_preparation.add_transition(bone_resurfacing, 1.0)  # Always go to recovery after suturing
 
 
 
-basic_simulation = SurgicalSimulation(initialize)
+basic_simulation = SurgicalSimulation(var_knee_surgery)
 #basic_simulation.set_start_process(initialize)
