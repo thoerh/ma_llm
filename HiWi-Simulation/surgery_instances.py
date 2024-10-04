@@ -11,7 +11,7 @@ from environment import GlobalVariables
 from environment import SurgicalSimulation
 
 
-var_knee_surgery = GlobalVariables(0.8, 0.7, 0.6)
+var_knee_surgery = GlobalVariables(0.3, 0.7, 0.7)
 
 
 
@@ -32,7 +32,8 @@ end = Process("End", 5)
 
 
 # Define transitions
-initialize.add_transition(cleaning, 1)
+initialize.add_transition(cleaning, 0.9)
+initialize.add_redo_transition(0.1)
 
 cleaning.add_transition(anesthesia, 0.8)
 cleaning.add_transition(cleaning, 0.1)  # 10% chance to repeat cleaning
@@ -44,7 +45,6 @@ incision.add_transition(knee_joint_preparation, 0.5)
 incision.add_transition(error_redo, 0.5)  
 
 knee_joint_preparation.add_transition(bone_resurfacing, 1.0)  # Always go to recovery after suturing
-
 
 
 basic_simulation = SurgicalSimulation(var_knee_surgery)
