@@ -36,10 +36,15 @@ class Process:
         self.adjustment_factors[next_process] = 1.0  # Default factor
         self.adjustable_transitions.add(next_process)
 
-    def add_alt_transition(self, next_process, base_probability):
+    def add_alt_transition(self, next_process, base_probability: float):
+        if not 0 <= base_probability <= 1:
+            raise ValueError("base_probability must be between 0 and 1")
         self.base_transitions[next_process] = base_probability
+        self.adjustment_factors[next_process] = 1.0  # Default factor
         
     def add_redo_transition(self, base_probability):
+        if not 0 <= base_probability <= 1:
+            raise ValueError("base_probability must be between 0 and 1")
         next_process = self
         self.base_transitions[next_process] = base_probability
 
@@ -107,7 +112,6 @@ class Process:
 
         # Combine adjusted and unadjusted transitions
         final_transitions = {**adjusted_transitions, **unadjusted_transitions}
-
         return final_transitions
 
 
