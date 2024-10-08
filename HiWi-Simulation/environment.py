@@ -44,7 +44,7 @@ class Process:
     def add_redo_transition(self, base_probability):
         if not 0 <= base_probability <= 1:
             raise ValueError("base_probability must be between 0 and 1")
-        next_process = self.name
+        next_process = self
         self.base_transitions[next_process] = base_probability
 
 
@@ -66,7 +66,7 @@ class Process:
 
         # Example adjustments:
         if global_vars.hygiene < 0.6:
-            factor *= (global_vars.hygiene)  # Lower hygiene increases complication/redo probability and decreases progress probability
+            factor *= global_vars.hygiene  # Lower hygiene increases complication/redo probability and decreases progress probability
         if global_vars.skill_level < 0.6:
             factor *= global_vars.skill_level  # Lower skill level decreases progress probability
         if global_vars.patient_health < 0.6:
