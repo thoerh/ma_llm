@@ -1,7 +1,7 @@
 # here are the classes defined which should stay the same for all surgeries like the:
 #       Process class definition
 #       Model for surgical simulation  
-#       Defining scene defining variables      
+#       Defining class for scene defining variables      
 
 # later
 #       Scene graph class
@@ -111,7 +111,7 @@ class Process:
 
         # Combine adjusted and unadjusted transitions
         final_transitions = {**adjusted_transitions, **unadjusted_transitions}
-
+        print(final_transitions)
         return final_transitions
 
 
@@ -121,6 +121,8 @@ class Process:
         adjusted_probs = self.adjust_probabilities(global_vars)
         
         r = random.random()  # Random float between 0 and 1
+        print(f"r: {r}")
+        print(f"adjusted_probs: {adjusted_probs}")
         cumulative_probability = 0.0
         for next_process, probability in adjusted_probs.items():
             cumulative_probability += probability
@@ -141,7 +143,7 @@ class SurgicalSimulation:
     #def set_start_process(self, process):
     #    self.current_process = process
 
-    def run(self, current_process: str):
+    def run(self, current_process):
         self.current_process = current_process
         print(f"Starting process: {self.current_process.name}")
         while self.current_process is not None:
