@@ -78,6 +78,7 @@ class Process:
 
     def adjust_probabilities(self, global_vars):
         # Adjust probabilities based on global variables
+        print(f"base_transitions: {self.base_transitions}")
         adjusted_transitions = {}
         unadjusted_transitions = {}
         adjusted_sum = 0
@@ -111,7 +112,6 @@ class Process:
 
         # Combine adjusted and unadjusted transitions
         final_transitions = {**adjusted_transitions, **unadjusted_transitions}
-        print(final_transitions)
         return final_transitions
 
 

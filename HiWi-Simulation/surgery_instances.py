@@ -11,7 +11,7 @@ from environment import GlobalVariables
 from environment import SurgicalSimulation
 
 
-var_knee_surgery = GlobalVariables(0.7, 0.7, 0.7)
+var_knee_surgery = GlobalVariables(0.2, 0.7, 0.7)
 
 
 
