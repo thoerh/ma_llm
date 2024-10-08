@@ -20,7 +20,7 @@ class GlobalVariables:
 
 
 class Process:
-    def __init__(self, Processname: str, Duration: float):
+    def __init__(self, Processname, Duration: float):
         self.name = Processname
         self.base_transitions = {}
         self.duration = Duration
@@ -40,12 +40,11 @@ class Process:
         if not 0 <= base_probability <= 1:
             raise ValueError("base_probability must be between 0 and 1")
         self.base_transitions[next_process] = base_probability
-        self.adjustment_factors[next_process] = 1.0  # Default factor
         
     def add_redo_transition(self, base_probability):
         if not 0 <= base_probability <= 1:
             raise ValueError("base_probability must be between 0 and 1")
-        next_process = self
+        next_process = self.name
         self.base_transitions[next_process] = base_probability
 
 
@@ -112,6 +111,7 @@ class Process:
 
         # Combine adjusted and unadjusted transitions
         final_transitions = {**adjusted_transitions, **unadjusted_transitions}
+
         return final_transitions
 
 
@@ -141,7 +141,7 @@ class SurgicalSimulation:
     #def set_start_process(self, process):
     #    self.current_process = process
 
-    def run(self, current_process):
+    def run(self, current_process: str):
         self.current_process = current_process
         print(f"Starting process: {self.current_process.name}")
         while self.current_process is not None:
