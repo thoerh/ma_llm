@@ -24,6 +24,7 @@ class Process:
         self.name = Processname
         self.base_transitions = {}
         self.duration = Duration
+        self.objects = {}
         
         self.adjustment_factors = {}
         self.adjustable_transitions = set()
@@ -32,6 +33,9 @@ class Process:
         for (process1, prob1), (process2, prob2) in zip(dictionary1.items(), dictionary2.items()):
             print(f"Transition: {self.name} -> {process1.name},     Base Probability: {prob1},      adjusted: {prob2}")
 
+
+    def add_object(self, new_object):
+        self.objects = new_object
 
     def add_transition(self, next_process, base_probability: float):
         if not 0 <= base_probability <= 1:

@@ -1,12 +1,18 @@
 
 class Person:
-    def __init__(self, name, role):
+    def __init__(self, name: str, role: str):
         self.name = name
         self.role = role
-        self.position = (0, 0, 0) 
+        self.position = (0, 0) 
+        self.tiredness_level = 0.0
 
-    def move(self, new_position):
+    def move(self, new_position: tuple[float, float]):
         self.position = new_position
+        return new_position
+
+    def tiredness(self, level: float = None):
+        if level is not None:
+            self.tiredness_level = level
 
 class Surgeon(Person):
     def __init__(self, name):
@@ -34,10 +40,10 @@ class Nurse(Person):
 class Patient:
     def __init__(self, name):
         self.name = name
-        self.position = (0, 0, 0)
-        self.knee_position = (0, 0, 0)
+        self.position = (0, 0)
+        self.knee_position = (0, 0)
 
-    def position_for_surgery(self, position, knee_position):
+    def position_for_surgery(self, position: tuple[float, float], knee_position: tuple[float,float]):
         self.position = position
         self.knee_position = knee_position
 
@@ -45,7 +51,7 @@ class SurgicalRobot:
     def __init__(self, name, model):
         self.name = name
         self.model = model
-        self.position = (0, 0, 0)
+        self.position = (0, 0)
         self.current_tool = None
 
     def move(self, new_position):
@@ -61,8 +67,11 @@ class SurgicalTool:
     def __init__(self, name, tool_type):
         self.name = name
         self.tool_type = tool_type
-        self.position = (0, 0, 0)
+        self.position = (0, 0)
         self.in_use = False
+
+    def move(self, new_position):
+        self.position = new_position
 
     def use(self):
         self.in_use = True
