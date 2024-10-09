@@ -28,6 +28,10 @@ class Process:
         self.adjustment_factors = {}
         self.adjustable_transitions = set()
 
+    def print_dictionary(self, dictionary1, dictionary2):
+        for (process1, prob1), (process2, prob2) in zip(dictionary1.items(), dictionary2.items()):
+            print(f"Transition: {self.name} -> {process1.name},     Base Probability: {prob1},      adjusted: {prob2}")
+
 
     def add_transition(self, next_process, base_probability: float):
         if not 0 <= base_probability <= 1:
@@ -60,8 +64,7 @@ class Process:
 
 
 
-    def calculate_adjustment_factor(self, next_process, global_vars):
-        # This method determines how global variables affect the transition
+    def calculate_adjustment_factor(self, next_process, global_vars):        # This method determines how global variables affect the transition
         factor = self.adjustment_factors[next_process]
 
         # Example adjustments:
@@ -76,9 +79,7 @@ class Process:
     
 
 
-    def adjust_probabilities(self, global_vars):
-        # Adjust probabilities based on global variables
-        print(f"base_transitions: {self.base_transitions}")
+    def adjust_probabilities(self, global_vars):         # Adjust probabilities based on global variables
         adjusted_transitions = {}
         unadjusted_transitions = {}
         adjusted_sum = 0
@@ -119,12 +120,13 @@ class Process:
 
     def get_next_process(self, global_vars):
         adjusted_probs = self.adjust_probabilities(global_vars)
+        adjusted_dict = dict(sorted(adjusted_probs.items(), key=lambda item: item[1], reverse=False))
         
         r = random.random()  # Random float between 0 and 1
         print(f"r: {r}")
-        print(f"adjusted_probs: {adjusted_probs}")
+        self.print_dictionary(self.base_transitions, adjusted_probs)
         cumulative_probability = 0.0
-        for next_process, probability in adjusted_probs.items():
+        for next_process, probability in adjusted_dict.items():
             cumulative_probability += probability
             if r < cumulative_probability:
                 return next_process
@@ -139,9 +141,6 @@ class Process:
 class SurgicalSimulation:
     def __init__(self, GlobalVariables):
         self.global_vars = GlobalVariables
-
-    #def set_start_process(self, process):
-    #    self.current_process = process
 
     def run(self, current_process):
         self.current_process = current_process
