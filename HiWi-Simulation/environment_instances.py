@@ -6,9 +6,9 @@
 #       Scene graph instances    
 
 
-from environment import Process
-from environment import GlobalVariables
-from environment import SurgicalSimulation
+from environment_classes import Process
+from environment_classes import GlobalVariables
+from environment_classes import SurgicalSimulation
 
 
 var_knee_surgery = GlobalVariables(0.2, 0.7, 0.7)
