@@ -161,7 +161,7 @@ class SurgicalSimulation:
         while self.current_process is not None:
             print(f"Executing process: {self.current_process.name} (Duration: {self.current_process.duration})")
             next_process = self.current_process.get_next_process(self.global_vars)
-            if next_process:
+            if next_process and next_process != "error":
                 print(f"Transitioning to: {next_process.name}")
                 self.current_process = next_process
             else:
