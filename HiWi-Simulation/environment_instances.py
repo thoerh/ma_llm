@@ -52,12 +52,18 @@ insertion_prosthetic.add_redo_transition(0.2)
 insertion_prosthetic.add_alt_transition(knee_joint_preparation, 0.2)
 
 
-#Description of processes and of objects during the specific processes
 
-        
-initialize.add_object_attribute(head_surgeon, {"position": (1, 2), "tiredness": 0.0})
+#Description of processes and of objects during the specific processes       
+initialize.add_object_attribute(head_surgeon, {"position": (1, 2), "tiredness_level": 0.0})
+initialize.add_object_attribute(assisting_surgeon, {"position": (2, 2), "tiredness_level": 0.0})
+initialize.add_object_attribute(scrub_nurse, {"position": (3, 2), "inventory": []})
+initialize.add_object_attribute(patient1, {"position": (0, 0), "knee_position": (0, 0)})
+initialize.add_object_attribute(robot1, {"position": (1, 1), "current_tool": None})
 
-print(initialize.print_dictionary(initialize.objects))
+
+
+
+
 
 
 

@@ -1,5 +1,5 @@
 
-class Person:
+class Object:
     def __init__(self, name: str, role: str):
         self.name = name
         self.role = role
@@ -14,7 +14,7 @@ class Person:
         if level is not None:
             self.tiredness_level = level
 
-class Surgeon(Person):
+class Surgeon(Object):
     def __init__(self, name):
         super().__init__(name, "Surgeon")
         self.current_tool = None
@@ -25,7 +25,7 @@ class Surgeon(Person):
     def put_down_tool(self):
         self.current_tool = None
 
-class Nurse(Person):
+class Nurse(Object):
     def __init__(self, name):
         super().__init__(name, "Nurse")
         self.inventory = []
@@ -37,21 +37,19 @@ class Nurse(Person):
         if item in self.inventory:
             self.inventory.remove(item)
 
-class Patient:
+class Patient(Object):
     def __init__(self, name):
-        self.name = name
-        self.position = (0, 0)
+        super().__init__(name, "Patient")
         self.knee_position = (0, 0)
 
     def position_for_surgery(self, position: tuple[float, float], knee_position: tuple[float,float]):
         self.position = position
         self.knee_position = knee_position
 
-class SurgicalRobot:
+class SurgicalRobot(Object):
     def __init__(self, name, model):
-        self.name = name
+        super().__init__(name, "Robot")
         self.model = model
-        self.position = (0, 0)
         self.current_tool = None
 
     def move(self, new_position):
@@ -63,11 +61,10 @@ class SurgicalRobot:
     def detach_tool(self):
         self.current_tool = None
 
-class SurgicalTool:
+class SurgicalTool(Object):
     def __init__(self, name, tool_type):
-        self.name = name
+        super().__init__(name, "Tool")
         self.tool_type = tool_type
-        self.position = (0, 0)
         self.in_use = False
 
     def move(self, new_position):

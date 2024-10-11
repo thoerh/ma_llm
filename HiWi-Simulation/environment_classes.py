@@ -9,7 +9,7 @@
 
 
 import random
-from object_classes import Person
+from object_classes import Object
 
 
 
@@ -40,8 +40,11 @@ class Process:
             print(f"Transition: {self.name} -> {process1.name},     Base Probability: {prob1},      adjusted: {prob2}")
 
 
-    def add_object_attribute(self, object, attribute):
-        self.objects [object]= attribute
+    def add_object_attribute(self, object, attributes):
+        self.objects [object]= attributes
+        for attr, value in attributes.items():
+            if hasattr(object, attr):
+                setattr(object, attr, value)
 
     def add_transition(self, next_process, base_probability: float):
         if not 0 <= base_probability <= 1:

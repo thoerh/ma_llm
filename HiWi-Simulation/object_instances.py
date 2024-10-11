@@ -1,4 +1,4 @@
-from object_classes import Person, Surgeon, Nurse, Patient, SurgicalRobot, SurgicalTool, SceneManager
+from object_classes import Object, Surgeon, Nurse, Patient, SurgicalRobot, SurgicalTool, SceneManager
 
 head_surgeon = Surgeon("Dr. A")
 head_surgeon.tiredness(0.2)
