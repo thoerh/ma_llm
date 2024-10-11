@@ -6,9 +6,7 @@
 #       Scene graph instances    
 
 
-from environment_classes import Process
-from environment_classes import GlobalVariables
-from environment_classes import SurgicalSimulation
+from environment_classes import Process, GlobalVariables, SurgicalSimulation
 
 from object_instances import head_surgeon, assisting_surgeon, scrub_nurse, circulating_nurse, patient1, robot1, scalpel, light, drill
 
@@ -56,22 +54,10 @@ insertion_prosthetic.add_alt_transition(knee_joint_preparation, 0.2)
 
 #Description of processes and of objects during the specific processes
 
+        
+initialize.add_object_attribute(head_surgeon, {"position": (1, 2), "tiredness": 0.0})
 
-initialize.add_object(head_surgeon)
-
-#initialize.objects[head_surgeon] = head_surgeon.move([1, 2])           ################################################################################################################
-#initialize.objects[head_surgeon] = head_surgeon.position
-#assisting_surgeon.move([2,2])
-
-
-scrub_nurse.move([0,1])
-circulating_nurse.move([3,2])
-patient1.position_for_surgery([1.5,1], [0.5,1])
-robot1.move([3,1])
-robot1.attach_tool(drill)
-robot1.attach_tool(scalpel)
-robot1.detach_tool()
-scalpel.move([3,2])
+print(initialize.print_dictionary(initialize.objects))
 
 
 

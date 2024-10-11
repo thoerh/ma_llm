@@ -9,6 +9,7 @@
 
 
 import random
+from object_classes import Person
 
 
 
@@ -29,13 +30,18 @@ class Process:
         self.adjustment_factors = {}
         self.adjustable_transitions = set()
 
-    def print_dictionary(self, dictionary1, dictionary2):
+    def print_dictionary (self, dictionary):
+        for object, attributes in dictionary.items():
+            print(f"Process {self.name}     Object: {object.role} - {object.name}        ->      Attributes: {attributes}")
+    
+    
+    def print_dictionaries(self, dictionary1, dictionary2):
         for (process1, prob1), (process2, prob2) in zip(dictionary1.items(), dictionary2.items()):
             print(f"Transition: {self.name} -> {process1.name},     Base Probability: {prob1},      adjusted: {prob2}")
 
 
-    def add_object(self, new_object):
-        self.objects = new_object
+    def add_object_attribute(self, object, attribute):
+        self.objects [object]= attribute
 
     def add_transition(self, next_process, base_probability: float):
         if not 0 <= base_probability <= 1:
@@ -128,7 +134,7 @@ class Process:
         
         r = random.random()  # Random float between 0 and 1
         print(f"r: {r}")
-        self.print_dictionary(self.base_transitions, adjusted_probs)
+        self.print_dictionaries(self.base_transitions, adjusted_probs)
         cumulative_probability = 0.0
         for next_process, probability in adjusted_dict.items():
             cumulative_probability += probability
