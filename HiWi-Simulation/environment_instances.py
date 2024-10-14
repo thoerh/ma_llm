@@ -11,7 +11,7 @@ from environment_classes import Process, GlobalVariables, SurgicalSimulation
 from object_instances import head_surgeon, assisting_surgeon, scrub_nurse, circulating_nurse, patient1, robot1, scalpel, drill, disinfectant, anesthetics, prosthesis, thread
 
 
-var_knee_surgery = GlobalVariables(0.7, 0.7, 0.7)
+var_knee_surgery = GlobalVariables(0.3, 0.7, 0.7)
 
 
 
