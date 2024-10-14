@@ -148,6 +148,7 @@ class Process:
         r = random.random()  # Random float between 0 and 1
         print(f"Random value: {r}")
         self.print_dictionaries(self.base_transitions, adjusted_probs)
+       
         cumulative_probability = 0.0
         for next_process, probability in adjusted_dict.items():
             cumulative_probability += probability
