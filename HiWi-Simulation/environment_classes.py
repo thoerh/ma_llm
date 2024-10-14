@@ -30,14 +30,24 @@ class Process:
         self.adjustment_factors = {}
         self.adjustable_transitions = set()
 
-    def print_dictionary (self, dictionary):
+    def print_process_dictionary (self, dictionary):
+        def convert_to_str(value):
+            if isinstance(value, list):
+                return [str(item) for item in value]
+            return str(value)
+        
+         # Define the width for the fields you want to align
+        role_width = 13  # Set a fixed width for the role
+        name_width = 20  # Set a fixed width for the name
+        
         for object, attributes in dictionary.items():
-            print(f"Process {self.name}     Object: {object.role} - {object.name}        ->      Attributes: {attributes}")
+            str_attributes = {k: convert_to_str(v) for k, v in attributes.items()}
+            print(f"Process {self.name}    Object: {object.role:<{role_width}} - {object.name:<{name_width}}      ->     Attributes: {str_attributes}")
     
     
     def print_dictionaries(self, dictionary1, dictionary2):
         for (process1, prob1), (process2, prob2) in zip(dictionary1.items(), dictionary2.items()):
-            print(f"Transition: {self.name} -> {process1.name},     Base Probability: {prob1},      adjusted: {prob2}")
+            print(f"Transition: {self.name:<35} -> {process1.name:<35},     Base Probability: {prob1:<5},      adjusted: {prob2}")
 
 
     def add_object_attribute(self, object, attributes):
@@ -136,7 +146,7 @@ class Process:
         adjusted_dict = dict(sorted(adjusted_probs.items(), key=lambda item: item[1], reverse=False))
         
         r = random.random()  # Random float between 0 and 1
-        print(f"r: {r}")
+        print(f"Random value: {r}")
         self.print_dictionaries(self.base_transitions, adjusted_probs)
         cumulative_probability = 0.0
         for next_process, probability in adjusted_dict.items():
@@ -159,18 +169,20 @@ class SurgicalSimulation:
 
     def run(self, current_process):
         self.current_process = current_process
-        print(f"Starting process: {self.current_process.name}")
+        print(f"\nStarting process: {self.current_process.name}")
         while self.current_process is not None:
             print(f"Executing process: {self.current_process.name} (Duration: {self.current_process.duration})")
-            self.history.append(self.current_process)
+            self.current_process.print_process_dictionary(self.current_process.objects)
+            self.history.append(self.current_process.name)
             next_process = self.current_process.get_next_process(self.global_vars)
             if next_process and next_process != "error":
-                print(f"Transitioning to: {next_process.name}")
+                print(f"Transitioning to: {next_process.name}\n")
                 self.current_process = next_process
             else:
-                print("End of surgery.")
+                print("End of surgery.\n")
                 self.current_process = None
     def get_simulation_history(self):
+        print(f"Process history of simulation: {self.history}")
         return self.history
 
 

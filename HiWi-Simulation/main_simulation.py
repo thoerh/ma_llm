@@ -13,3 +13,4 @@ from environment_instances import basic_simulation
 
 starting_process = initialize
 basic_simulation.run(starting_process)
+basic_simulation.get_simulation_history()

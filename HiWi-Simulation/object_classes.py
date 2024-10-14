@@ -14,6 +14,9 @@ class Object:
         if level is not None:
             self.tiredness_level = level
 
+    def __str__(self):
+        return self.name
+
 class Surgeon(Object):
     def __init__(self, name):
         super().__init__(name, "Surgeon")
@@ -75,6 +78,7 @@ class SurgicalTool(Object):
 
     def release(self):
         self.in_use = False
+
 
 class SceneManager:
     def __init__(self):

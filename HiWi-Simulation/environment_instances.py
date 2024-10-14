@@ -31,7 +31,7 @@ initialize.add_transition(cleaning, 0.9)
 initialize.add_redo_transition(0.1)
 
 cleaning.add_transition(anesthesia, 0.8)
-cleaning.add_redo_transition(0.15) 
+cleaning.add_redo_transition(0.15)
 cleaning.add_alt_transition(error, 0.05)
 
 anesthesia.add_transition(incision, 0.9)
@@ -75,14 +75,7 @@ insertion_prosthetic.add_object_attribute(head_surgeon, {"position": (0.5, 1), "
 insertion_prosthetic.add_object_attribute(assisting_surgeon, {"position": (0, 1), "tiredness_level": 0.2, "current_tool": prosthesis})
 insertion_prosthetic.add_object_attribute(circulating_nurse, {"position": (0.5, 1.5), "inventory": []})
 
-closing_incision.add_object_attribute(head_surgeon, {"position": (0.5, 1), "tiredness_level": 0.5, "current_tool": thread})                                                         #################################
-
-
-
-print(initialize.print_dictionary(initialize.objects))
-print(head_surgeon.tiredness_level)
-
-
+closing_incision.add_object_attribute(head_surgeon, {"position": (0.5, 1), "tiredness_level": 0.5, "current_tool": thread})
 
 
 
