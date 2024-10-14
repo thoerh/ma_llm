@@ -154,12 +154,15 @@ class Process:
 class SurgicalSimulation:
     def __init__(self, GlobalVariables):
         self.global_vars = GlobalVariables
+        self.history = []
+        self.current_process = None
 
     def run(self, current_process):
         self.current_process = current_process
         print(f"Starting process: {self.current_process.name}")
         while self.current_process is not None:
             print(f"Executing process: {self.current_process.name} (Duration: {self.current_process.duration})")
+            self.history.append(self.current_process)
             next_process = self.current_process.get_next_process(self.global_vars)
             if next_process and next_process != "error":
                 print(f"Transitioning to: {next_process.name}")
@@ -167,6 +170,8 @@ class SurgicalSimulation:
             else:
                 print("End of surgery.")
                 self.current_process = None
+    def get_simulation_history(self):
+        return self.history
 
 
     # Simulate a simple surgery
