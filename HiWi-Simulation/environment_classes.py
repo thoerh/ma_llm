@@ -1,10 +1,12 @@
 # here are the classes defined which should stay the same for all surgeries like the:
+#       Defining class for scene defining variables
 #       Process class definition
 #       Model for surgical simulation  
-#       Defining class for scene defining variables      
+      
 
 # later
 #       Scene graph class
+#       incorporate timing
 
 
 
