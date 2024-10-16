@@ -11,7 +11,7 @@ from environment_classes import Process, GlobalVariables, SurgicalSimulation
 from object_instances import head_surgeon, assisting_surgeon, scrub_nurse, circulating_nurse, patient1, robot1, scalpel, drill, disinfectant, anesthetics, prosthesis, thread
 
 
-var_knee_surgery = GlobalVariables(0.2, 0.7, 0.7)
+var_knee_surgery = GlobalVariables(0.8, 0.7, 0.7)
 
 
 
@@ -37,12 +37,12 @@ cleaning.add_alt_transition(error, 0.05)
 anesthesia.add_transition(incision, 0.9)
 anesthesia.add_redo_transition(0.1)
 
-incision.add_transition(insertion_prosthetic, 0.5)
-incision.add_redo_transition(0.5)  
+incision.add_transition(insertion_prosthetic, 0.7)
+incision.add_redo_transition(0.3)  
 
-insertion_prosthetic.add_transition(closing_incision, 0.6)
-insertion_prosthetic.add_redo_transition(0.2)
-insertion_prosthetic.add_alt_transition(error, 0.2)
+insertion_prosthetic.add_transition(closing_incision, 0.76)
+insertion_prosthetic.add_redo_transition(0.12)
+insertion_prosthetic.add_alt_transition(error, 0.12)
 
 closing_incision.add_transition(end, 0.8)
 closing_incision.add_redo_transition(0.1)

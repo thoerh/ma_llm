@@ -22,6 +22,7 @@ class GlobalVariables:
         self.patient_health = patient_health
 
 
+
 class Process:
     def __init__(self, Processname, Duration: float):
         self.name = Processname
@@ -161,7 +162,15 @@ class Process:
    
 
 
+class Time:
+    def __init__(self, Process: Process, Mean: float, Variance: float):
+        self.current_process = Process
+        self.time_mean = Mean
+        self.time_variance = Variance
+        self.rand = random.random()
 
+    def get_time(self, current_process, time_mean, time_variance):
+        
 
         
 class SurgicalSimulation:
