@@ -266,34 +266,38 @@ class SurgicalSimulation:
 
             next_process = self.current_process.get_next_process(self.global_vars)
 
-            if next_process and next_process != "error":
+            if next_process is None:
+                print("\nEnd of surgery.\n")
+                self.current_process = None
+            elif next_process == "error":
+                print("An error occurred in the surgery. Ending simulation.\n")
+                self.current_process = None
+            else:
                 print(f"Transitioning to: {next_process.name}\n")
+                
+                # Check if transition exists
                 if next_process in self.current_process.transitions:
                     transition = self.current_process.transitions[next_process]
                     transition.prepare_transition()
-                
+                    
+                    # Execute transition
                     transition_ongoing = True
                     elapsed_time = 0
                     while transition_ongoing:
-                        elapsed_time += 1  # Simulate time steps
+                        elapsed_time += 0.1  # Simulate time steps
                         transition_ongoing = transition.execute_transition(elapsed_time)
-                        self.transition_time += 1
-                        self.total_time += 1
-                
-                    print(f"Transition completed. Time taken: {elapsed_time:.2f}")
+                        self.transition_time += 0.1
+                        self.total_time += 0.1
+                    
+                    print(f"Transition completed. Time taken: {elapsed_time:.2f}\n")
                     self.current_process = next_process
-
                 else:
                     print(f"No transition defined from {self.current_process.name} to {next_process.name}")
                     print("Ending simulation due to undefined transition.\n")
                     self.current_process = None
 
-            else:
-                print("End of surgery.\n")
-                self.current_process = None
-
         print(f"Total surgery time: {self.total_time:.2f}")
-        print(f"Total transition time: {self.transition_time:.2f}")
+        print(f"Total transition time: {self.transition_time:.2f}\n")
 
 
     def get_simulation_history(self):
