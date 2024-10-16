@@ -29,9 +29,9 @@ error = Process("Error", mean_duration=900, base_variance=300)
 initialize.add_transition(cleaning, 0.9)
 initialize.add_redo_transition(0.1)
 
-cleaning.add_transition(anesthesia, 0.8)
-cleaning.add_redo_transition(0.15)
-cleaning.add_alt_transition(error, 0.05)
+cleaning.add_transition(end, 0.8)
+cleaning.add_redo_transition(0.1)
+cleaning.add_alt_transition(error, 0.1)
 
 anesthesia.add_transition(incision, 0.9)
 anesthesia.add_redo_transition(0.1)

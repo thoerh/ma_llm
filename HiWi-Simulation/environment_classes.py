@@ -47,7 +47,7 @@ class Transition:
                 self.moving_objects[obj] = {
                     'start_pos': start_pos,
                     'end_pos': end_pos,
-                    'move_time': move_time
+                    'move_time': move_time 
                 }
 
     def execute_transition(self, elapsed_time):
@@ -269,7 +269,7 @@ class SurgicalSimulation:
             if next_process is None:
                 print("\nEnd of surgery.\n")
                 self.current_process = None
-            elif next_process == "error":
+            elif next_process.name == 'Error':
                 print("An error occurred in the surgery. Ending simulation.\n")
                 self.current_process = None
             else:
@@ -282,11 +282,13 @@ class SurgicalSimulation:
                     
                     # Execute transition
                     elapsed_time = 0
-                    while transition.execute_transition(elapsed_time):                                      ##############Maybe back to transition_ongoing (look in claudeai)
+                    objects_still_moving = True
+                    while objects_still_moving:                                      ##############Maybe back to transition_ongoing (look in claudeai)
                         elapsed_time += 0.1  # Simulate time steps
                         self.transition_time += 0.1
                         self.total_time += 0.1
-                        print("Moving objects:", transition.moving_objects)
+                        objects_still_moving = transition.execute_transition(elapsed_time)
+                        print("Moving objects:", transition.moving_objects)             ################################
                     
                     print(f"Transition completed. Time taken: {elapsed_time:.2f}\n")
                     self.current_process = next_process
