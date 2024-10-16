@@ -14,15 +14,14 @@ from object_instances import head_surgeon, assisting_surgeon, scrub_nurse, circu
 var_knee_surgery = GlobalVariables(0.8, 0.7, 0.7)
 
 
-
-initialize = Process("Initialize", 5)
-cleaning = Process("Cleaning", 10)
-anesthesia = Process("Anesthesia", 15)
-incision = Process("Incision", 20)
-insertion_prosthetic = Process("Insertion of Prosthetic Components", 35)
-closing_incision = Process("Closing of Incision", 20)
-end = Process("End", 5)
-error = Process("Error", 15)
+initialize = Process("Initialize", mean_duration=10, base_variance=1)
+cleaning = Process("Cleaning", mean_duration=10, base_variance=2)
+anesthesia = Process("Anesthesia", mean_duration=15, base_variance=2.5)
+incision = Process("Incision", mean_duration=15, base_variance=3)
+insertion_prosthetic = Process("Insertion of Prosthetic Components", mean_duration=30, base_variance=7)
+closing_incision = Process("Closing of Incision", mean_duration=15, base_variance=4)
+end = Process("End", mean_duration=10, base_variance=1)
+error = Process("Error", mean_duration=15, base_variance=5)
 
 
 

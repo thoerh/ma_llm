@@ -12,6 +12,9 @@
 
 import random
 from object_classes import Object
+from scipy import stats
+import math
+
 
 
 
@@ -22,16 +25,62 @@ class GlobalVariables:
         self.patient_health = patient_health
 
 
+class Transition:
+    def __init__(self, from_process, to_process):
+        self.from_process = from_process
+        self.to_process = to_process
+        self.moving_objects = {}
+
+    def calculate_distance(self, pos1, pos2):
+        return math.sqrt((pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2)
+
+    def calculate_move_time(self, object, start_pos, end_pos, speed=1.0):
+        distance = self.calculate_distance(start_pos, end_pos)
+        return distance / speed
+
+    def prepare_transition(self):
+        for obj, attrs in self.to_process.objects.items():
+            if 'position' in attrs:
+                start_pos = self.from_process.objects[obj]['position'] if obj in self.from_process.objects else obj.position
+                end_pos = attrs['position']
+                move_time = self.calculate_move_time(obj, start_pos, end_pos)
+                self.moving_objects[obj] = {
+                    'start_pos': start_pos,
+                    'end_pos': end_pos,
+                    'move_time': move_time
+                }
+
+    def execute_transition(self, elapsed_time):
+        still_moving = False
+        for obj, move_info in self.moving_objects.items():
+            if elapsed_time < move_info['move_time']:
+                progress = elapsed_time / move_info['move_time']
+                new_pos = (
+                    move_info['start_pos'][0] + (move_info['end_pos'][0] - move_info['start_pos'][0]) * progress,
+                    move_info['start_pos'][1] + (move_info['end_pos'][1] - move_info['start_pos'][1]) * progress
+                )
+                obj.position = new_pos
+                still_moving = True
+            else:
+                obj.position = move_info['end_pos']
+        return still_moving
+    
+
+
 
 class Process:
-    def __init__(self, Processname, Duration: float):
+    def __init__(self, Processname, mean_duration: float, base_variance: float):
         self.name = Processname
         self.base_transitions = {}
-        self.duration = Duration
         self.objects = {}
-        
+
         self.adjustment_factors = {}
         self.adjustable_transitions = set()
+
+        self.transitions = {}
+        self.time = Time(self, mean_duration, base_variance)
+        
+        
 
     def print_process_dictionary (self, dictionary):
         def convert_to_str(value):
@@ -65,17 +114,20 @@ class Process:
         self.base_transitions[next_process] = base_probability
         self.adjustment_factors[next_process] = 1.0  # Default factor
         self.adjustable_transitions.add(next_process)
+        self.transitions[next_process] = Transition(self, next_process)
 
     def add_alt_transition(self, next_process, base_probability: float):
         if not 0 <= base_probability <= 1:
             raise ValueError("base_probability must be between 0 and 1")
         self.base_transitions[next_process] = base_probability
+        self.transitions[next_process] = Transition(self, next_process)
         
     def add_redo_transition(self, base_probability):
         if not 0 <= base_probability <= 1:
             raise ValueError("base_probability must be between 0 and 1")
         next_process = self
         self.base_transitions[next_process] = base_probability
+        self.transitions[next_process] = Transition(self, next_process)
 
 
 
@@ -162,39 +214,92 @@ class Process:
    
 
 
+
 class Time:
-    def __init__(self, Process: Process, Mean: float, Variance: float):
-        self.current_process = Process
-        self.time_mean = Mean
-        self.time_variance = Variance
-        self.rand = random.random()
+    def __init__(self, process, mean, base_variance):
+        self.process = process
+        self.mean = mean
+        self.base_variance = base_variance
 
-    def get_time(self, current_process, time_mean, time_variance):
+    def calculate_adjusted_variance(self, global_vars):
+        # Adjust variance based on skill level
+        skill_factor = 1 + (1 - global_vars.skill_level)  # Higher skill reduces variance
+        # Adjust variance based on patient health
+        health_factor = 1 + (1 - global_vars.patient_health)  # Better health reduces variance
+        
+        return self.base_variance * skill_factor * health_factor
+
+    def get_time(self, global_vars):
+        adjusted_variance = self.calculate_adjusted_variance(global_vars)
+        
+        # Generate time using a normal distribution and the adapted variance
+        time = stats.truncnorm(
+            (0 - self.mean) / adjusted_variance,
+            (float('inf') - self.mean) / adjusted_variance,
+            loc=self.mean,
+            scale=adjusted_variance
+            ).rvs()
+        
+        return max(0, time)  # Ensure non-negative time
+    
+
         
 
-        
 class SurgicalSimulation:
     def __init__(self, GlobalVariables):
         self.global_vars = GlobalVariables
         self.history = []
         self.current_process = None
+        self.total_time = 0
+        self.transition_time = 0
 
-    def run(self, current_process):
-        self.current_process = current_process
+    def run(self, starting_process):
+        self.current_process = starting_process
         print(f"\nStarting process: {self.current_process.name}")
+
         while self.current_process is not None:
-            print(f"Executing process: {self.current_process.name} (Duration: {self.current_process.duration})")
+            process_time = self.current_process.time.get_time(self.global_vars)
+            self.total_time += process_time
+            print(f"Executing process: {self.current_process.name} (Duration: {process_time:.2f})")
             self.current_process.print_process_dictionary(self.current_process.objects)
-            self.history.append(self.current_process.name)
+            self.history.append((self.current_process.name, process_time))
+
             next_process = self.current_process.get_next_process(self.global_vars)
+
             if next_process and next_process != "error":
                 print(f"Transitioning to: {next_process.name}\n")
-                self.current_process = next_process
+                if next_process in self.current_process.transitions:
+                    transition = self.current_process.transitions[next_process]
+                    transition.prepare_transition()
+                
+                    transition_ongoing = True
+                    elapsed_time = 0
+                    while transition_ongoing:
+                        elapsed_time += 1  # Simulate time steps
+                        transition_ongoing = transition.execute_transition(elapsed_time)
+                        self.transition_time += 1
+                        self.total_time += 1
+                
+                    print(f"Transition completed. Time taken: {elapsed_time:.2f}")
+                    self.current_process = next_process
+
+                else:
+                    print(f"No transition defined from {self.current_process.name} to {next_process.name}")
+                    print("Ending simulation due to undefined transition.\n")
+                    self.current_process = None
+
             else:
                 print("End of surgery.\n")
                 self.current_process = None
+
+        print(f"Total surgery time: {self.total_time:.2f}")
+        print(f"Total transition time: {self.transition_time:.2f}")
+
+
     def get_simulation_history(self):
-        print(f"Process history of simulation: {self.history}")
+        print(f"Process history of simulation:")
+        for process, time in self.history:
+            print(f"  {process:<37}: {time:.2f} min")
         return self.history
 
 
