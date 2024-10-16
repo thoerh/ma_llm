@@ -281,13 +281,12 @@ class SurgicalSimulation:
                     transition.prepare_transition()
                     
                     # Execute transition
-                    transition_ongoing = True
                     elapsed_time = 0
-                    while transition_ongoing:
+                    while transition.execute_transition(elapsed_time):                                      ##############Maybe back to transition_ongoing (look in claudeai)
                         elapsed_time += 0.1  # Simulate time steps
-                        transition_ongoing = transition.execute_transition(elapsed_time)
                         self.transition_time += 0.1
                         self.total_time += 0.1
+                        print("Moving objects:", transition.moving_objects)
                     
                     print(f"Transition completed. Time taken: {elapsed_time:.2f}\n")
                     self.current_process = next_process
@@ -296,14 +295,14 @@ class SurgicalSimulation:
                     print("Ending simulation due to undefined transition.\n")
                     self.current_process = None
 
-        print(f"Total surgery time: {self.total_time:.2f}")
-        print(f"Total transition time: {self.transition_time:.2f}\n")
+        print(f"Total surgery time: {self.total_time/60:.2f} min")
+        print(f"Total transition time: {self.transition_time:.2f} sec\n")
 
 
     def get_simulation_history(self):
         print(f"Process history of simulation:")
         for process, time in self.history:
-            print(f"  {process:<37}: {time:.2f} min")
+            print(f"  {process:<37}: {time/60:.2f} min")
         return self.history
 
 
