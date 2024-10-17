@@ -309,7 +309,7 @@ class SurgicalSimulation:
     def get_simulation_history(self):
         print(f"Process history of simulation:")
         for process, time in self.history:
-            print(f"  {process:<37}: {time/60:.2f} min")
+            print(f"  {process:<37}: {time/60:8.2f} min")
         return self.history
 
 
