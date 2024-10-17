@@ -60,7 +60,7 @@ class Transition:
                     move_info['start_pos'][1] + (move_info['end_pos'][1] - move_info['start_pos'][1]) * progress
                 )
                 obj.position = new_pos
-                print(f"Moving (t: {elapsed_time:.2f}): {obj.name:<25} from {self.from_process.name:<15} Position {move_info['start_pos']} -> to {self.to_process.name:<15} Position {move_info['end_pos']} => {obj.position}")
+                print(f"Moving (t: {elapsed_time:.2f}): {obj.name:<25} from {self.from_process.name:<15} Position ({move_info['start_pos'][0]:>6.2f}, {move_info['start_pos'][1]:>6.2f}) -> to {self.to_process.name:<15} Position ({move_info['end_pos'][0]:>6.2f}, {move_info['end_pos'][1]:>6.2f}) => current Position: ({obj.position[0]:>6.2f}, {obj.position[1]:>6.2f})")
                 still_moving = True
             else:
                 obj.position = move_info['end_pos']
