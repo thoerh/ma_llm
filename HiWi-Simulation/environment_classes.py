@@ -60,7 +60,7 @@ class Transition:
                     move_info['start_pos'][1] + (move_info['end_pos'][1] - move_info['start_pos'][1]) * progress
                 )
                 obj.position = new_pos
-                print(f"Moving (t: {elapsed_time:.2f}): {obj.name:<25} from {self.from_process.name:<15} Position {move_info['start_pos']} -> {self.to_process.name:<15} Position {move_info['end_pos']} => {obj.position}")
+                print(f"Moving (t: {elapsed_time:.2f}): {obj.name:<25} from {self.from_process.name:<15} Position {move_info['start_pos']} -> to {self.to_process.name:<15} Position {move_info['end_pos']} => {obj.position}")
                 still_moving = True
             else:
                 obj.position = move_info['end_pos']
@@ -285,7 +285,10 @@ class SurgicalSimulation:
                     # Execute transition
                     elapsed_time = 0
                     #objects_still_moving = True
-                    while transition.execute_transition(elapsed_time):                                      ##############Maybe back to objects_still_moving (look in claudeai)
+                    while True:
+                        objects_still_moving = transition.execute_transition(elapsed_time)
+                        if not objects_still_moving:
+                            break                                      ##############Maybe back to objects_still_moving (look in claudeai)
                         elapsed_time += 0.1  # Simulate time steps
                         self.transition_time += 0.1
                         self.total_time += 0.1
